@@ -1,13 +1,13 @@
 #include <stdio.h>
 #include <string.h>
 
-// Définition des structures Adresse et Personne
+// Définition des structures ambrique
 struct Adresse {
     char rue[40];
     char ville[20];
     int code_postal;
 };
-
+//la défition de structure de personne
 struct Personne {
     char nom[30];
     int age;
@@ -47,32 +47,41 @@ void AfficherPersonnes(struct Personne personnes[], int total) {
 
 
 // Fonction pour mettre à jour les informations d'une personne
-void mettreAJourPersonne(struct Personne personnes[], int index) {
+void mettreAJourPersonne(struct Personne personnes[], int position) {
     printf("Entrez le nouveau nom de la personne : ");
-    scanf(" %[^\n]", personnes[index].nom);
+    scanf(" %[^\n]", personnes[position].nom);
     printf("Entrez le nouvel Age de la personne : ");
-    scanf("%d", &personnes[index].age);
+    scanf("%d", &personnes[position].age);
     printf("Entrez la nouvelle rue : ");
-    scanf(" %[^\n]", personnes[index].adresse.rue);
+    scanf(" %[^\n]", personnes[position].adresse.rue);
     printf("Entrez la nouvelle ville : ");
-    scanf(" %[^\n]", personnes[index].adresse.ville);
+    scanf(" %[^\n]", personnes[position].adresse.ville);
     printf("Entrez le nouveau code postal : ");
-    scanf("%d", &personnes[index].adresse.code_postal);
+    scanf("%d", &personnes[position].adresse.code_postal);
 }
 
 // Fonction pour supprimer une personne
-void supprimerPersonne(struct Personne personnes[], int *index, int supprimerIndex) {
-    for (int i = supprimerIndex; i < *index - 1; i++) {
+int supprimerPersonne(struct Personne personnes[], int nbrT, int position) {
+//verfier la la positin exist ou non (validation de positin)
+    if (position < 0 || position >= nbrT) {
+        printf("position invalide.\n");
+        return nbrT; 
+    }
+    //la suppression
+    for (int i = position; i < nbrT - 1; i++) {
         personnes[i] = personnes[i + 1];
     }
-    (*index)--; // Réduction du nombre total de personnes
+    
+    nbrT--;//Diminue le nombre total d'éléments dans le tableau pour refléter la suppression.
+
     printf("Personne supprimee avec succes.\n");
+    return nbrT; 
 }
 
 
 int main() {
-    struct Personne personnes[10]; //  Tableau de 10 personnes
-    int choix, index = 0;
+    struct Personne personnes[10]; //  Tableau stockage 
+    int choix, position = 0;
 
     do {
         printf("\nMenu :\n");
@@ -86,27 +95,27 @@ int main() {
 
         switch (choix) {
             case 1: // Création d'une personne
-                if (index < 10) {
-                    creerPersonne(personnes, index);
-                    index++;
+                if (position < 10) {
+                    creerPersonne(personnes, position);
+                    position++;
                 } else {
                     printf("Liste de personnes pleine !\n");
                 }
                 break;
 
             case 2: // Affichage d'une personne
-               if (index > 0) {
-                 AfficherPersonnes(personnes, index);
+               if (position > 0) {
+                 AfficherPersonnes(personnes, position);
                      } else {
                         printf("Aucune personne à afficher.\n");
                         }
                     break;
             case 3: // Mise à jour d'une personne
-                if (index > 0) {
+                if (position > 0) {
                     int i;
-                    printf("Entrez l index de la personne a mettre A jour  : ", index - 1);
+                    printf("Entrez l position de la personne a mettre A jour  : ", position - 1);
                     scanf("%d", &i);
-                    if (i >= 0 && i < index) {
+                    if (i >= 0 && i < position) {
                         mettreAJourPersonne(personnes, i);
                     } else {
                         printf("Index invalide.\n");
@@ -115,21 +124,22 @@ int main() {
                     printf("Aucune personne a mettre a jour.\n");
                 }
                 break;
-
-            case 4: // Suppression d'une personne
-                if (index > 0) {
-                    int i;
-                    printf("Entrez l index de la personne a supprimer  : ", index - 1);
+                // Suppression d'une personne
+                 case 4: 
+                 //vérifier la tableau contient des personne ou non
+                if (position > 0) {
+                    int i;// declaration de la position qui doit entrer
+                    printf("Entrez la position  de la personne a supprimer (0 a %d) : ", position - 1);
                     scanf("%d", &i);
-                    if (i >= 0 && i < index) {
-                        supprimerPersonne(personnes, &index, i);
+                    //validation de postion entrer
+                    if (i >= 0 && i < position) {
+                        position = supprimerPersonne(personnes, position, i);
                     } else {
-                        printf("Index invalide.\n");
+                        printf("position invalide.\n");
                     }
                 } else {
                     printf("Aucune personne a supprimer.\n");
                 }
-                break;
 
             case 5: // Quitter
                 printf("Au revoir !\n");
