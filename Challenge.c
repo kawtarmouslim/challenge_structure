@@ -9,15 +9,18 @@ struct Adresse {
 };
 //la défition de structure de personne
 struct Personne {
-    char nom[30];
+    
+    char nom[30],id[8];
     int age;
     struct Adresse adresse;
 };
 
 // Fonction pour créer une personne
 void creerPersonne(struct Personne personnes[], int index) {
+     printf("Entrez le Id de la personne : ");
+    scanf(" %[^\n]", personnes[index].id);
     printf("Entrez le nom de la personne : ");
-    scanf(" %[^\n]", personnes[index].nom); // Lecture multi-mots
+    scanf(" %[^\n]", personnes[index].nom); // Lecture multi-mots " %[^\n]": pour lire chaine de caractere evec espace
     printf("Entrez l Age de la personne : ");
     scanf("%d", &personnes[index].age);
     printf("Entrez la rue : ");
@@ -92,9 +95,10 @@ int main() {
         printf("5. Quitter\n");
         printf("Votre choix : ");
         scanf("%d", &choix);
-
+       //traitment
         switch (choix) {
             case 1: // Création d'une personne
+            //vérifier la liste peleine ou non
                 if (position < 10) {
                     creerPersonne(personnes, position);
                     position++;
@@ -104,6 +108,7 @@ int main() {
                 break;
 
             case 2: // Affichage d'une personne
+            //vérifier le tableau contient des personne ou non
                if (position > 0) {
                  AfficherPersonnes(personnes, position);
                      } else {
@@ -113,7 +118,7 @@ int main() {
             case 3: // Mise à jour d'une personne
                 if (position > 0) {
                     int i;
-                    printf("Entrez l position de la personne a mettre A jour  : ", position - 1);
+                    printf("Entrez l positiongi de la personne a mettre A jour  : ", position - 1);
                     scanf("%d", &i);
                     if (i >= 0 && i < position) {
                         mettreAJourPersonne(personnes, i);
